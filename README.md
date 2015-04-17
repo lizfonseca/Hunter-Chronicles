@@ -31,7 +31,8 @@ The topicsID number serves as a _foreign key_ in order to reference the topics w
 ##User Stories
 The forum can be accessed via IP address and port:
 
- _ip & port here_
+ _IP: 104.131.56.178_
+ _Port: 2000_
 
 #####Main page
 + Once connected, the user will find a welcome page with an 'Enter' button.The button directs the user to the forum's main page.

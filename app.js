@@ -25,10 +25,17 @@ app.get('/topics', function(req, res){
     res.send(html);
   });
 });
+// directs to the new topic form
 app.get('/topics/create', function(req, res){
-
+  console.log(req.body);
+  res.send(fs.readFileSync('./views/form_t.html', 'utf8'))
+});
+// saves new info from form into database & redirects user
+app.post('/topics', function(req, res){
+  console.log('New Topic Created!');
 });
 
+// runs server
 app.listen(2000, function(){
   console.log("The server listens...");
 });
