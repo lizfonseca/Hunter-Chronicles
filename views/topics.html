@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hunter Chronicles - Topics</title>
+</head>
+<body>
+  <h1>Topics</h1>
+  <form action="/topics/create" method="GET">
+      <button>Add Topic</button>
+    </form>
+  <ul>
+    {{#topicsList}}
+      <li><a href="/topics/{{ID}}">{{Title}}
+      <br>{{Description}}</a>
+      <br>by {{Author}}</li>
+    {{/topicsList}}
+  </ul>
+</body>
+</html>
