@@ -32,6 +32,7 @@ The topicsID number serves as a _foreign key_ in order to reference the topics w
 The forum can be accessed via IP address and port:
 
  _IP: 104.131.56.178_
+ 
  _Port: 2000_
 
 #####Main page

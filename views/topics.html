@@ -10,10 +10,10 @@
       <button>Add Topic</button>
     </form>
   <ul>
+    <li>Votes - Title - Description</li>
     {{#topicsList}}
-      <li><a href="/topics/{{ID}}">{{Title}}
-      <br>{{Description}}</a>
-      <br>by {{Author}}</li>
+      <li>{{Votes}} - <a href="/topics/{{ID}}">{{Title}} - {{Description}}</a>
+      by {{Author}}</li>
     {{/topicsList}}
   </ul>
 </body>

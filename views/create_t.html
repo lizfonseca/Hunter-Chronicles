@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hunter Chronicles - New Topic</title>
+</head>
+<body>
+  <h1>Create New Topic</h1>
+  <form action="/topics" method="POST">
+    <p>
+      <input type="text" name="title" placeholder="topic title as h3">
+      <br>
+      <input type="text" name="description" placeholder="topic description as h4">
+      <br>
+      <input type="text" name="author" placeholder="topic author as h5">
+      </p>
+      <button type="submit">Create</button>
+  </form>
+  <form action="/topics" method="GET">
+    <button type="submit">Cancel</button>
+  </form>
+</body>
+</html>
