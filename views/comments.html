@@ -2,11 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hunter Chronicles - Comments</title>
+  <title>Comments</title>
 </head>
 <body>
-  <h1>Hunter Chronicles</h1>
-  <h3> The online Gathering Hall for hunters. Hunters Unite!</h3>
-  
+  <form action="/topics/{{id}}/comments/create" method="GET">
+    <button>Add Comment</button>
+  </form>
+  <form action="/topics/{{id}}?_method=DELETE" method="POST">
+    <button>Delete Topic</button>
+  </form>
+
+  {{#topicDetails}}
+    <h1>{{title}} | &uarr; {{votes}} &darr;</h1>
+    <h2>{{description}}</h2>
+  {{/topicDetails}}
+  <br>
+    <ul>
+      <li><a href="/topics/{{id}}/comments/{{id}}">
+      {{#commentDetails}}
+        {{commentTitle}}</a> by {{commentAuthor}}</li>
+      {{/commentDetails}}
+    </ul>
 </body>
 </html>

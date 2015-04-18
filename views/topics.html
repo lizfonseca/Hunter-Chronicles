@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hunter Chronicles - Topics</title>
+  <title>Topics</title>
 </head>
 <body>
   <h1>Topics</h1>
   <form action="/topics/create" method="GET">
-      <button>Add Topic</button>
+      <button type="submit">Add Topic</button>
     </form>
   <ul>
     <li>Votes - Title - Description</li>
     {{#topicsList}}
-      <li>{{Votes}} - <a href="/topics/{{ID}}">{{Title}} - {{Description}}</a>
-      by {{Author}}</li>
+      <li>{{votes}} - <a href="/topics/{{id}}/comments">{{title}} - {{description}}</a>
+      by {{author}}</li>
     {{/topicsList}}
   </ul>
 </body>

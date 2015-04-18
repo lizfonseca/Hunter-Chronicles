@@ -7,13 +7,18 @@
 <body>
   <h1>Create New Topic</h1>
   <form action="/topics" method="POST">
-    <p>
-      <input type="text" name="title" placeholder="topic title as h3">
+      <label>Title:<br>
+        <input type="text" name="title" placeholder="render as h3">
+      </label>
       <br>
-      <input type="text" name="description" placeholder="topic description as h4">
+      <label>Description:<br>
+        <input type="text" name="description" placeholder="render as h4">
+      </label>
       <br>
-      <input type="text" name="author" placeholder="topic author as h5">
-      </p>
+      <label>Author:<br>
+        <input type="text" name="author" placeholder="render as h5">
+      </label>
+      <br>
       <button type="submit">Create</button>
   </form>
   <form action="/topics" method="GET">
