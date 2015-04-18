@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>Create New Comment</h1>
-  <form action="/topics/{{id}}/comments" method="GET">
+  <form action="/topics/:id/comments" method="GET">
       <label>Title:<br>
         <input type="text" name="title" placeholder="render as h3">
       </label>

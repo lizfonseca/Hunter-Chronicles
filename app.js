@@ -32,23 +32,22 @@ app.get('/topics', function(req, res){
   });
 });
 // directs to the new topic form
-app.get('/topics/create', function(req, res){
+app.get('/topics/new', function(req, res){
    console.log(req.body);
   res.send(topicForm);
 });
   // NEED TO FIX ISSUE WHERE ENPTY FORM FIELDS GET ADDED
-
-// redirects user to main forum page
-app.post('/topics', function(req, res){
+// saves info into db & redirects user to main forum page
+app.post('/topics/create', function(req, res){
   console.log(req.body);
   db.run("INSERT INTO topics (title, description, author, votes) VALUES ('" + req.body.title + "', '" + req.body.description + "', '" + req.body.author + "', 0);");
-  // res.send('/topics');
+  res.redirect('/topics');
 });
 // directs user to comments of a topic
 app.get('/topics/:id/comments', function(req, res){
   var id = req.params.id;
-  db.all("SELECT FROM comments WHERE topics_id=" + id, function(err, topics){
-    var html = Mustache.render(commentsTemplate, {commentDetails: comments});
+  db.all("SELECT FROM comments WHERE topics_id=" + id, function(err, comments){
+    var html = Mustache.render(commentsTemplate, {commentDetails:comments});
     res.send(html);
     });
 });

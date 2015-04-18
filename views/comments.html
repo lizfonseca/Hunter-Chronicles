@@ -12,15 +12,14 @@
     <button>Delete Topic</button>
   </form>
 
-  {{#topicDetails}}
-    <h1>{{title}} | &uarr; {{votes}} &darr;</h1>
-    <h2>{{description}}</h2>
-  {{/topicDetails}}
+  {{#commentDetails}}
+    <h1>{{topic_id.title}} | &uarr; {{votes}} &darr;</h1>
+    <h2>{{topic_id.description}}</h2>
   <br>
     <ul>
-      <li><a href="/topics/{{id}}/comments/{{id}}">
-      {{#commentDetails}}
-        {{commentTitle}}</a> by {{commentAuthor}}</li>
+      <li><a href="/topics/:id/comments/{{id}}">
+        {{title}}</a> by {{author}}
+        <br>{{content}}</li>
       {{/commentDetails}}
     </ul>
 </body>
