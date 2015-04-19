@@ -11,9 +11,11 @@ var util = require('util');
 // also needed
 var db = new sqlite3.Database("./forum.db");
 var app= express();
-  var topicsTemplate = fs.readFileSync('./views/topics.html', 'utf8');
-  var commentsTemplate = fs.readFileSync('./views/comments.html', 'utf8');
-  var topicForm = fs.readFileSync('./views/create_t.html', 'utf8');
+// all HTML files 
+var homepage = fs.readFileSync('./views/index.html', 'utf8');
+var topicsTemplate = fs.readFileSync('./views/topics/index.html', 'utf8');
+var commentsTemplate = fs.readFileSync('./views/comments/index.html', 'utf8');
+var topicForm = fs.readFileSync('./views/topics/new.html', 'utf8');
   // var commentForm = fs.readFileSync('./views/create_c.html', 'utf8');
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -22,7 +24,7 @@ app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 // access index page
 app.get('/', function(req, res){
-  res.send(fs.readFileSync('./views/index.html', 'utf8'));
+  res.send(homepage);
 });
 // access main forum page
 app.get('/topics', function(req, res){
@@ -45,41 +47,20 @@ app.post('/topics/create', function(req, res){
 });
 // directs user to the comments of a topic
 // the user can also read comments and post a new comment on the form
-app.get('topics/:id', function(res, req){
-  // console.log(res)
-  var id = req.params.id;
-  db.all("SELECT * FROM topics WHERE id=" + id + ";", {}, function(err, topic){
-    db.all("SELECT * FROM comments WHERE topic_id=" + id + ";", {}, function(err, comments){
-      fs.readFileSync('./views/comments.html', 'utf8', function(err, content){
-        var html = Mustache.render(commentsTemplate, {
-          // id: topic[0].id,
-          title: topic[0].title,
-          votes: topic[0].votes,
-          description: topic[0].description,
-          commentDetails: comments
-        });
-        res.send(html);
-      });
-    });
-  });
-});
-
-
 app.get('/topics/:id', function(req, res){
   var id = req.params.id;
-  db.all("SELECT * FROM topics WHERE id =" + id + ";", {}, function(err, topic){
-    db.all("SELECT * FROM comments WHERE topics_id=" + id + ";", {}, function(err, content){
-      fs.readFileSync('./views/comments.html', 'utf8', function(err, comments){
-    var html = Mustache.render(commentsTemplate, {
-      // title: topic[0].title,
-      // votes: topic[0].votes,
-      // description: topic[0].description,
-      commentDetails:comments});
-    res.send(html);
-      });
+  db.all("SELECT * FROM comments WHERE topics_id=" + id + ";", {}, function(err, comments){
+    var html = Mustache.render(commentsTemplate, {commentDetails:comments});
+        res.send(html);
     });
   });
-});
+
+
+
+
+
+
+
 
 
 

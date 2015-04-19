@@ -19,23 +19,22 @@
   <h3>Create New Comment</h3>
   <form action="/topics/{{id}}" method="POST">
       <label>Title:<br>
-        <textarea type="text" name="title" 
-   rows="3" cols="25" placeholder="render as h3">
-        </textarea>
-      <br>
+        <input type="text" name="title" 
+         size="40" placeholder="render as h3">
+        </input>
       </label>
+      <br>
       <label>Author:<br>
-        <input type="text" name="author" placeholder="render as h5">
+        <input type="text" name="author" size="40" placeholder="render as h5">
       </label>
       <br>
       <label>Content:<br>
         <textarea type="text" name="content" 
-   rows="3" cols="25" placeholder="render as h4">
+   rows="3" cols="29" placeholder="render as h4">
         </textarea>
         <!-- <input type="text" name="content" placeholder="render as h4"> -->
       </label>
       <br>
-      
       <button type="submit">Create</button>
   </form>
 </body>
