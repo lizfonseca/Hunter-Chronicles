@@ -22,58 +22,55 @@ app.use(bodyParser.urlencoded({extended: false}));
 // app.use(express.static('views'));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
-// access index page
+// user reaches the forum homepage
 app.get('/', function(req, res){
   res.send(homepage);
 });
-// access main forum page
+// user can see the list of topics
 app.get('/topics', function(req, res){
   db.all("SELECT * FROM topics;", function(err, topics){
     var html = Mustache.render(topicsTemplate, {topicsList: topics});
     res.send(html);
   });
 });
-// directs to the new topic form
+// to create a new topic, the user is directed to a form  
 app.get('/topics/new', function(req, res){
    console.log(req.body);
   res.send(topicForm);
 });
-// NEED TO FIX ISSUE WHERE ENPTY FORM FIELDS GET ADDED
-// saves info into db & redirects user to main forum page
+// saves info into db & redirects user to topics page
 app.post('/topics/create', function(req, res){
   console.log(req.body);
   db.run("INSERT INTO topics (title, description, author, votes) VALUES ('" + req.body.title + "', '" + req.body.description + "', '" + req.body.author + "', 0);");
   res.redirect('/topics');
 });
-// directs user to the comments of a topic
-// the user can also read comments and post a new comment on the form
+// the user can also read comments and topic information
 app.get('/topics/:id', function(req, res){
   var id = req.params.id;
-  db.all("SELECT * FROM comments WHERE topics_id=" + id + ";", {}, function(err, comments){
-    var html = Mustache.render(commentsTemplate, {commentDetails:comments});
+  db.all("SELECT * FROM topics where id=" + id + ";", {}, function(err, topic){
+    db.all("SELECT * FROM comments WHERE topics_id=" + id + ";", {}, function(err, comments){
+        var html = Mustache.render(commentsTemplate, {
+          title: topic[0].title,
+          votes: topic[0].votes,
+          description: topic[0].description,
+          commentDetails: comments
+        });
         res.send(html);
+      });
     });
   });
+// using the form below, the user can create a new comment on the current topic
 
+// title , author , content , city , topics_id 
 
+app.post('topics/:id/comments/new', function(req, res){
+  var id = req.params.id;
+  // need to implement IP locator API here!!!!!
+  var city;
+  db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + req.body.title + "', '" + req.body.author + "', '" + city + id + ");");
+  res.redirect('/topics/:id');
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// add new comment into specific topic
 // app.post('topics/:id', function(req, res){
 //   var id = req.params.id;
 //   db.all("SELECT FROM topics WHERE id = " + id +";", {}, function(err, topic){
