@@ -11,6 +11,9 @@ var util = require('util');
 // also needed
 var db = new sqlite3.Database("./forum.db");
 var app= express();
+// var clientCity = app.get('http://ipinfo.io/city', function(req, res){
+//   db.run("INSERT INTO comments (city) VALUES '" + res.body + "';");
+// });
 // all HTML files 
 var homepage = fs.readFileSync('./views/index.html', 'utf8');
 var topicsTemplate = fs.readFileSync('./views/topics/index.html', 'utf8');
@@ -45,40 +48,48 @@ app.post('/topics/create', function(req, res){
   res.redirect('/topics');
 });
 // the user can also read comments and topic information
-app.get('/topics/:id', function(req, res){
-  var id = req.params.id;
-  db.all("SELECT * FROM topics where id=" + id + ";", {}, function(err, topic){
-    db.all("SELECT * FROM comments WHERE topics_id=" + id + ";", {}, function(err, comments){
-        var html = Mustache.render(commentsTemplate, {
-          title: topic[0].title,
-          votes: topic[0].votes,
-          description: topic[0].description,
-          commentDetails: comments
-        });
-        res.send(html);
+app.get('/topics/:topic_id', function(req, res){
+  var topic_id = req.params.topic_id;
+  // debugger
+  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+    db.all("SELECT * FROM comments WHERE topics_id=" + topic_id + ";", {}, function(err, comments){
+      console.log(topic);
+      var html = Mustache.render(commentsTemplate, {
+        id: topic[0].id,
+        title: topic[0].title,
+        votes: topic[0].votes,
+        description: topic[0].description,
+        commentDetails: comments
       });
+      debugger
+      res.send(html);
     });
   });
+});
 // using the form below, the user can create a new comment on the current topic
-
-// title , author , content , city , topics_id 
-
-app.post('topics/:id/comments/new', function(req, res){
-  var id = req.params.id;
-  // need to implement IP locator API here!!!!!
-  var city;
-  db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + req.body.title + "', '" + req.body.author + "', '" + city + id + ");");
-  res.redirect('/topics/:id');
+app.post('/topics/:topic_id/comments/create', function(req, res){
+  var topic_id = req.params.topic_id;
+  var clientCity = 'locate me';
+  db.all("SELECT * FROM topics WHERE id=" + topic_id + "';", {}, function(err, topic){
+    db.all("SELECT * FROM comments WHERE id=" + topic_id + ";", {}, function(err, comments){
+    // var topic = topic[0];
+    console.log(topic);
+    console.log(comments);
+    db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + comments.title + "', '" + comments.author + "', '" + comments.content + "', '" + clientCity + "', " + topic_id + ");");
+    res.redirect('/topics/:topic_id');
+    });
+  });
 });
 
-// app.post('topics/:id', function(req, res){
-//   var id = req.params.id;
-//   db.all("SELECT FROM topics WHERE id = " + id +";", {}, function(err, topic){
-//     db.all("INSERT INTO comments (title, author, content) VALUES ")
-//   }){
 
-//   };
-// };
+
+// the user can edit a specific comment from a topic
+// app.get('/topics/:topic_id/comments/:id');
+// the user can also delete a specific comment from a topic
+
+
+
+
 // runs server
 app.listen(2000, function(){
   console.log("The server listens...");

@@ -5,32 +5,33 @@
   <title>Comments</title>
 </head>
 <body>
-    <h1>{{title}} | {{votes}} &uarr; &darr;</h1>
-    <h2>{{description}}</h2>
+  <h1>{{title}} | {{votes}} &uarr; &darr;</h1>
+  <h2>{{description}}</h2>
   <hr/>
+  <h3>Comments:</h3>  
     <ul>
       {{#commentDetails}}
-      <li><a href="/topics/{{id}}">
+      <li><a href="/topics/{{topics_id}}/comments/{{id}}">
         {{title}}</a> by {{author}}
         <br>{{content}}</li>
       {{/commentDetails}}
     </ul>
   <hr/>
   <h3>Create New Comment</h3>
-  <form action="/topics/{{id}}" method="POST">
+  <form action="/topics/{{id}}/comments/create" method="POST">
       <label>Title:<br>
         <input type="text" name="title" 
-         size="40" placeholder="render as h3">
+         size="58" maxlength="50" placeholder="render as h4">
         </input>
       </label>
       <br>
       <label>Author:<br>
-        <input type="text" name="author" size="40" placeholder="render as h5">
+        <input type="text" name="author" size="30" placeholder="render as h5">
       </label>
       <br>
       <label>Content:<br>
         <textarea type="text" name="content" 
-   rows="3" cols="29" placeholder="render as h4">
+   rows="5" cols="40" placeholder="render as text">
         </textarea>
       </label>
       <br>
