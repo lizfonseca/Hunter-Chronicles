@@ -75,8 +75,8 @@ app.get('/topics/:topic_id', function(req, res){
         description: topic[0].description,
         commentDetails: comments,
       });
-        console.log(topic);
-        console.log(comments);
+        // console.log(topic);
+        // console.log(comments);
       res.send(html);
     });
   });
@@ -105,13 +105,18 @@ app.get('/topics/:topic_id/comments/:id', function(req, res){
   });
 });
 // the user can edit a specific comment from the current topic
-app.put('topics/:topic_id/comments/:id', function(req, res){
+app.put('topics/:topic_id/comments/:id?_method=PUT', function(req, res){
   var topic_id = req.params.topic_id;
   var id = req.params.id;
   var comment = req.body;
-
   db.all("SELECT FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
-    db.all("SELECT FROM comments where id=" + id + ";", {}, function(err, comment){
+    db.all("SELECT FROM comments where id=" + id + ";", {}, function(err, comments){
+       Mustache.render(editCommentForm,{
+        topics_id: topic[0].topics_id,
+        id: comments[0].id,
+        title: comments[0].title,
+        content: comments[0].content
+       });
        db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE topics_id=" + topic_id + ";");
   res.redirect('topics/' + topics_id);
     });
