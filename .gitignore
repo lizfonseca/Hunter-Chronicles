@@ -1,5 +1,2 @@
 .DS_Store
 node_modules
-forum.db
-schema.js
-seed.js
