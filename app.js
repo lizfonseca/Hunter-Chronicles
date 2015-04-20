@@ -6,6 +6,7 @@ var marked = require('marked');
 var methodOverride = require("method-override");
 var morgan = require("morgan");
 var Mustache = require("mustache");
+var request = require('request');
 var sqlite3 = require("sqlite3");
 var util = require('util');
 // also needed
@@ -31,7 +32,7 @@ app.get('/', function(req, res){
 });
 // user can see the list of topics
 app.get('/topics', function(req, res){
-  db.all("SELECT * FROM topics;", function(err, topics){
+  db.all("SELECT * FROM topics ORDER BY votes;", function(err, topics){
     var html = Mustache.render(topicsTemplate, {topicsList: topics});
     res.send(html);
   });
@@ -42,50 +43,56 @@ app.get('/topics/new', function(req, res){
   res.send(topicForm);
 });
 // saves info into db & redirects user to topics page
-app.post('/topics/create', function(req, res){
-  console.log(req.body);
+app.post('/topics/new', function(req, res){
   db.run("INSERT INTO topics (title, description, author, votes) VALUES ('" + req.body.title + "', '" + req.body.description + "', '" + req.body.author + "', 0);");
   res.redirect('/topics');
 });
+
+// user can upvote or downvote on a topic
+// app.put('/topics/:topic_id', function(req, res){
+//   var topic_id = req.params.topic_id;
+//   db.run("UPDATE topics SET vote=" + )
+// });
+
 // the user can also read comments and topic information
 app.get('/topics/:topic_id', function(req, res){
   var topic_id = req.params.topic_id;
-  // debugger
   db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
     db.all("SELECT * FROM comments WHERE topics_id=" + topic_id + ";", {}, function(err, comments){
-      console.log(topic);
       var html = Mustache.render(commentsTemplate, {
         id: topic[0].id,
         title: topic[0].title,
         votes: topic[0].votes,
         description: topic[0].description,
-        commentDetails: comments
+        commentDetails: comments,
       });
-      debugger
+        console.log(topic);
+        console.log(comments);
       res.send(html);
     });
   });
 });
 // using the form below, the user can create a new comment on the current topic
-app.post('/topics/:topic_id/comments/create', function(req, res){
-  var topic_id = req.params.topic_id;
-  var clientCity = 'locate me';
-  db.all("SELECT * FROM topics WHERE id=" + topic_id + "';", {}, function(err, topic){
-    db.all("SELECT * FROM comments WHERE id=" + topic_id + ";", {}, function(err, comments){
-    // var topic = topic[0];
-    console.log(topic);
-    console.log(comments);
-    db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + comments.title + "', '" + comments.author + "', '" + comments.content + "', '" + clientCity + "', " + topic_id + ");");
-    res.redirect('/topics/:topic_id');
-    });
+app.post('/topics/:topic_id/', function(req, res){
+var topic_id = req.params.topic_id;
+var comments = req.body;
+// var clientCity = 'locate me';  
+  request.get('http://ipinfo.io/geo', function(error, response, body){
+    var info = JSON.parse(body);
+    var clientCity = info.city + ", " + info.country;
+      db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + comments.title + "', '" + comments.author + "', '" + comments.content + "', '" + clientCity + "', " + topic_id + ");");
+  res.redirect('/topics/:topic_id');
   });
 });
 
 
 
-// the user can edit a specific comment from a topic
-// app.get('/topics/:topic_id/comments/:id');
-// the user can also delete a specific comment from a topic
+
+// // the user can edit a specific comment from a topic
+// app.get('/topics/:topic_id/comments/:id', function (req, res){
+
+// });
+// // the user can also delete a specific comment from a topic
 
 
 
