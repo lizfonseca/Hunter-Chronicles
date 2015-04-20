@@ -20,6 +20,7 @@ var homepage = fs.readFileSync('./views/index.html', 'utf8');
 var topicsTemplate = fs.readFileSync('./views/topics/index.html', 'utf8');
 var commentsTemplate = fs.readFileSync('./views/comments/index.html', 'utf8');
 var topicForm = fs.readFileSync('./views/topics/new.html', 'utf8');
+var editCommentForm = fs.readFileSync('./views/comments/edit.html', 'utf8');
   // var commentForm = fs.readFileSync('./views/create_c.html', 'utf8');
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -44,7 +45,8 @@ app.get('/topics/new', function(req, res){
 });
 // saves info into db & redirects user to topics page
 app.post('/topics/new', function(req, res){
-  db.run("INSERT INTO topics (title, description, author, votes) VALUES ('" + req.body.title + "', '" + req.body.description + "', '" + req.body.author + "', 0);");
+  var topic = req.body;
+  db.run("INSERT INTO topics (title, description, author, votes) VALUES ('" + topic.title + "', '" + topic.description + "', '" + topic.author + "', 0);");
   res.redirect('/topics');
 });
 
@@ -75,24 +77,41 @@ app.get('/topics/:topic_id', function(req, res){
 // using the form below, the user can create a new comment on the current topic
 app.post('/topics/:topic_id/', function(req, res){
 var topic_id = req.params.topic_id;
-var comments = req.body;
-// var clientCity = 'locate me';  
+var comment = req.body;
   request.get('http://ipinfo.io/geo', function(error, response, body){
     var info = JSON.parse(body);
     var clientCity = info.city + ", " + info.country;
-      db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + comments.title + "', '" + comments.author + "', '" + comments.content + "', '" + clientCity + "', " + topic_id + ");");
-  res.redirect('/topics/:topic_id');
+      db.run("INSERT INTO comments (title, author, content, city, topics_id) VALUES ('" + comment.title + "', '" + comment.author + "', '" + comment.content + "', '" + clientCity + "', " + topic_id + ");");
+  res.redirect('/topics/' + topic_id);
   });
 });
+// using the form below, the user can create a new comment on the current topic
+app.get('/topics/:topic_id/comments/:id', function(req, res){
+  var topic_id = req.params.topic_id;
+  var id = req.params.id;
+  db.all("SELEC * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+    db.all("SELECT * FROM comments WHERE topics_id=" + topic_id + ";", {}, function(err, comments){
+      var html = Mustache.render(editCommentForm, comments[0]);
+      res.send(html);
+    });
+  });
+});
+// the user can edit a specific comment from the current topic
+app.put('topics/:topic_id/comments/:id', function(req, res){
+  var topic_id = req.params.topic_id;
+  var id = req.params.id;
+  var comment = req.body;
 
-
-
-
-// // the user can edit a specific comment from a topic
-// app.get('/topics/:topic_id/comments/:id', function (req, res){
-
-// });
-// // the user can also delete a specific comment from a topic
+  db.all("SELECT FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+    db.all("SELECT FROM comments where id=" + id + ";", {}, function(err, comment){
+       db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE topics_id=" + topic_id + ";");
+  res.redirect('topics/' + topics_id);
+    });
+  });
+  // db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE topics_id=" + topic_id + ";");
+  // res.redirect('topics/' + topics_id);
+});
+// the user can also delete a specific comment from a topic
 
 
 

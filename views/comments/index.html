@@ -5,15 +5,19 @@
   <title>Comments</title>
 </head>
 <body>
+  <nav>
+    <a href="/topics">&larr; Back to topics</a>
+  </nav>
   <h1>{{title}} | {{votes}} &uarr; &darr;</h1>
   <h2>{{description}}</h2>
   <hr/>
   <h3>Comments:</h3>  
     <ul>
       {{#commentDetails}}
-      <li><a href="/topics/{{topics_id}}/comments/{{id}}">
+      <li><a href="/topics/{{topics_id}}/comments/{{id}}" title="edit">
         {{title}}</a> by {{author}}
         <br>{{content}}</li>
+        <br>
       {{/commentDetails}}
     </ul>
   <hr/>
