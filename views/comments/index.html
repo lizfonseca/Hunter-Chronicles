@@ -5,10 +5,16 @@
   <title>Comments</title>
 </head>
 <body>
-  <nav>
-    <a href="/topics">&larr; Back to topics</a>
-  </nav>
-  <h1>{{title}} | {{votes}} &uarr; &darr;</h1>
+  <form action="/topics" method="GET">
+    <button>&larr; Back to topics</button>
+  </form>
+  <h1>
+     {{title}} | {{votes}} 
+    <form action="/topics/{{id}}?_method=PUT" method="POST" style = "display:inline">
+        <button  name="upvote">&uarr;</button>
+        <button  name="downvote">&darr;</button>
+    </form>
+  </h1>
   <h2>{{description}}</h2>
   <hr/>
   <h3>Comments:</h3>  

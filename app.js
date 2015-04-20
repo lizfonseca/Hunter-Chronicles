@@ -51,10 +51,17 @@ app.post('/topics/new', function(req, res){
 });
 
 // user can upvote or downvote on a topic
-// app.put('/topics/:topic_id', function(req, res){
-//   var topic_id = req.params.topic_id;
-//   db.run("UPDATE topics SET vote=" + )
-// });
+app.put('/topics/:topic_id?_method=PUT', function(req, res){
+  var topic_id = req.params.topic_id;
+  var id = req.params.id;
+  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+    console.log(topic);
+    var upvote = topic[0].votes + 1;
+    // var downvote = topic[0].votes - 1;
+    db.run("UPDATE topics SET votes=" + upvote + " WHERE id=" + topic_id + ";");
+      res.send('topics/:topic_id');
+  });
+});
 
 // the user can also read comments and topic information
 app.get('/topics/:topic_id', function(req, res){
@@ -85,6 +92,7 @@ var comment = req.body;
   res.redirect('/topics/' + topic_id);
   });
 });
+
 // using the form below, the user can create a new comment on the current topic
 app.get('/topics/:topic_id/comments/:id', function(req, res){
   var topic_id = req.params.topic_id;
