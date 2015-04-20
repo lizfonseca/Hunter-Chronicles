@@ -10,10 +10,13 @@
   </form>
   <h1>
      {{title}} | {{votes}} 
-    <form action="/topics/{{id}}?_method=PUT" method="POST" style = "display:inline">
+    <form action="/topics/{{id}}/upvote?_method=PUT" method="POST" style = "display:inline">
         <button  name="upvote">&uarr;</button>
+    </form>
+    <form action="/topics/{{id}}/upvote?_method=PUT" method="POST" style = "display:inline">
         <button  name="downvote">&darr;</button>
     </form>
+    
   </h1>
   <h2>{{description}}</h2>
   <hr/>
