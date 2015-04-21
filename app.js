@@ -47,34 +47,10 @@ app.post('/topics/new', function(req, res){
   res.redirect('/topics');
 });
 
-// // user can upvote on a particular topic
-// app.put('/topics/:topic_id', function(req, res){
-//   var topic_id = req.params.topic_id;
-//   db.run("UPDATE topics SET votes= votes + 1 WHERE id=" + topic_id);
-//   res.redirect('/topics/' + topic_id);
-// });
-
-// the user can edit a specific comment from the current topic
-app.get('/topics/:topic_id', function(req, res){
+// user can upvote on a particular topic
+app.put('/topics/:topic_id', function(req, res){
   var topic_id = req.params.topic_id;
-  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
-       var html = Mustache.render(editCommentForm,{
-        topics_id: comment[0].topics_id,
-        id: comment[0].id,
-        title: comment[0].title,
-        content: comment[0].content
-       });
-       res.send(html);
-  });
-});
-// user can edit and update a comment of a topic
-app.put('/topics/:topic_id/comments/:id', function(req, res){
-  var topic_id = req.params.topic_id;
-  var id = req.params.id;
-  var topic = req.body;
-  console.log(req);
-
-  db.run("UPDATE topics SET title= '" + topic.title + "', description= '" + topic.description + "', votes= votes + 1 WHERE id=" + topic_id + ";");
+  db.run("UPDATE topics SET votes= votes + 1 WHERE id=" + topic_id);
   res.redirect('/topics/' + topic_id);
 });
 
