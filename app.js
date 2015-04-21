@@ -47,12 +47,6 @@ app.post('/topics/new', function(req, res){
   res.redirect('/topics');
 });
 
-// user can upvote on a particular topic
-app.put('/topics/:topic_id', function(req, res){
-  var topic_id = req.params.topic_id;
-  db.run("UPDATE topics SET votes= votes + 1 WHERE id=" + topic_id);
-  res.redirect('/topics/' + topic_id);
-});
 
 // the user can also read comments and topic information
 app.get('/topics/:topic_id', function(req, res){
@@ -72,6 +66,12 @@ app.get('/topics/:topic_id', function(req, res){
       res.send(html);
     });
   });
+});
+// user can upvote on a particular topic
+app.put('/topics/:topic_id', function(req, res){
+  var topic_id = req.params.topic_id;
+  db.run("UPDATE topics SET votes= votes + 1 WHERE id=" + topic_id);
+  res.redirect('/topics/' + topic_id);
 });
 // using the form below, the user can create a new comment on the current topic
 app.post('/topics/:topic_id/', function(req, res){

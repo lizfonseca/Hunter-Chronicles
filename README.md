@@ -6,27 +6,20 @@
 ####General
 The forum is populated by **topics**, and topics are  populated by **comments**. Topics are organized by _**popularity**_ in ascending order. Popularity is defined by the amount of 'upvotes' given to a particular topic.
 
-_image here_
-
-
-Each topic contains the following information:
-
-_image here_
-
-Meanwhile, comments hold the following information:
-
-_image here_
-
 ####Technical
-This illustration shows how the database holds the forum's information:
+This illustration below shows how the database holds the forum's information:
 
-_ERD here_
+<img src="http://i.imgur.com/pBmWGYl.jpg"/>
 
 + The topics table holds an ID number, title, author (name or username), short description, and votes (value).
 
 + The comments table holds an ID number, tite, author, content, city tag, and topicsID number.
 
 The topicsID number serves as a _foreign key_ in order to reference the topics with the comments table.
+
+The following illustration shows the flow of the forum via routes and their corresponding HTML pages (wireframes):
+
+<img src="http://i.imgur.com/JhUHLpC.jpg"/>
 
 ##User Stories
 The forum can be accessed via IP address and port:
