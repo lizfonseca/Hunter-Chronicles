@@ -32,23 +32,17 @@ The topicsID number serves as a _foreign key_ in order to reference the topics w
 The forum can be accessed via IP address and port:
 
  _IP: 104.131.56.178_
- 
+
  _Port: 2000_
 
 #####Main page
-+ Once connected, the user will find a welcome page with an 'Enter' button.The button directs the user to the forum's main page.
++ Once connected, the user will find a welcome page.
 
- _image here_
++ The user will be directed to the main forum page that contains the list of topics.
 
-+ The main page contains the list of topics. Each topic has a popularity value, and the topics are ordered from most to least popular.
++ The user can create a new topic.
 
- _image here_
-
-+ If the user is interested in creating a new topic, s/he can do so via the 'Add' button. It will take the user to a form.
-
- _image here_
-
-+ Once the new topic is created, the user will be directed back to the topics list.
++ The user will be directed back to the topics list once creating a new comment.
 
  >_All new topics start with a value of 0 upvotes._
 
@@ -57,21 +51,9 @@ The forum can be accessed via IP address and port:
 #####Topic page
 + The topic page contains the topic's information (title, description, author, votes) and its corresponding comments.
 
- _image here_
-
-+ On this page, the user is able to either delete the topic or add a new comment.
-
- _image here_
-
- If the user deletes the page, they will be redirected automatically to the main page.
-
- >_The user will not be prompted on the topic deletion, therefore it is advised to first consider before proceeding._
-
- A new comment can be created via the 'Add' button. It will take the user to a form.
++ The user can add a new comment for the current topic.
 
 + The user must fill the new information in the form fields and click the 'Save' button.
-
- _image here_
 
 + Once the comment is created, the user will be directed back to the comments list.
 
@@ -79,46 +61,76 @@ The forum can be accessed via IP address and port:
 
 #####Comment page
 
-+ The comment page contains the comment's information (topic title, comment title, author, content, and tag).
-
- _image here_
-
-+ On this page, the user is able to either edit or delete the comment.
-
- _image here_
-
- A comment can be edited via the 'Edit' button. It will take the user to a form.
++ The user can edit the comment through the edit comment form.
 
 + The user must fill the new information in the form fields and click the 'Save' button.
 
- _image here_
-
 + Once the comment is edited, the user will be directed back to the comments list.
 
- If the user deletes the comment, they will be redirected automatically to the topic page.
-
->_The user will not be prompted on the comment deletion, therefore it is advised to first consider before proceeding._
-
 ##Tools & Resources
+**1. Node** library used for the following modules.
 
-**1. Sqlite3**
+**2. Sqlite3** is the node module used to create a database and adding/retrieving information.
 
-**2. Mustache**
+**3. Mustache** used to render information from the database into the html files.
 
-**3. Node (fs)**
+**4. Node (fs)** used to open and read the needed files.
 
-**4. Express**
+**5. Express** used for HTTP requests.
 
-**5. Morgan**
+**6. Morgan** used for displaying HTTP requests made while accessing the forum.
 
-**6. Body Parser**
+**7. Body Parser** used for parsing the body of the HTTP response.
 
-**7. Method Override**
+**8. Method Override** used for PUT and DELETE methods in html files
 
-**8. Digital Ocean**
+**9. Digital Ocean** used to deploy the local server as a remote server.
 
-**9. Marked**
+**10. Marked** module used to parse markdown syntax and render it as HTML syntax
 
-**10. IPInfo (API)**
+**11. IPInfo (API)** used for retrieving the client's current city location via IP address.
+
+##Download
+
+  If you would like a copy of these files, go to:
+
+  https://github.com/lizfonseca/Hunter-Chronicles
+
++ Click on the 'Download as zip' button located on the right margin.
+
++ Unzip files
+
++ Open the Terminal and access the files:
+```bash
+$ cd [path to your zip folder here]
+```
+
++ Install node:
+
+https://nodejs.org/download/
+
++ Install node modules:
+
+```bash
+$ npm install .
+```
+
++ Install Nodemon:
+
+```bash
+$ npm install -g nodemon
+```
+
++ Open browser window and type the following:
+
+``` localhost:2000 ```
+
++ Still inside the folder path (on Terminal window), type the following:
+
+```bash
+$ nodemon app.js
+```
+
++ Go back into the browser window and refresh the page. The server would run.
 
 ######Hunter Chronicles: The online Gathering Hall for hunters. Hunters Unite!
