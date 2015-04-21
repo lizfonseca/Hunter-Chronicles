@@ -31,6 +31,7 @@ app.get('/', function(req, res){
 // user can see the list of topics
 app.get('/topics', function(req, res){
   db.all("SELECT * FROM topics ORDER BY votes;", function(err, topics){
+    db.all("SELECT * FROM comments ")
     var html = Mustache.render(topicsTemplate, {topicsList: topics});
     res.send(html);
   });
@@ -47,33 +48,33 @@ app.post('/topics/new', function(req, res){
   res.redirect('/topics');
 });
 
+// user can upvote on a particular topic
+// app.put('/topics/:topic_id/upvote?_method=PUT', function(req, res){
+//   var topic_id = req.params.topic_id;
 
-app.put('/topics/:topic_id/upvote', function(req, res){
-var topic_id:req.params.topic_id;
+//   db.run("UPDATE topics SET vote = vote + 1 WHERE id = " + topic_id + ";");
+//   res.redirect('/topics/' + topic_id);
+// });
+// // user can downvote on a particular topic
+// app.put('/topics/:topic_id/downvote?_method=PUT', function(req, res){
+//   var topic_id =req.params.topic_id;
 
-db.run("UPDATE topics SET vote = vote + 1 WHERE id = " + topic_id + ";");
-res.redirect('/topics/' + topic_id);
-});
+//   db.run("UPDATE topics SET vote = vote - 1 WHERE id = " + topic_id + ";");
+//   res.redirect('/topics/' + topic_id);
+// });
 
-app.put('/topics/:topic_id/downvote', function(req, res){
-var topic_id:req.params.topic_id;
-
-db.run("UPDATE topics SET vote = vote - 1 WHERE id = " + topic_id + ";");
-res.redirect('/topics/' + topic_id);
-});
-
-// user can upvote or downvote on a topic
-app.put('/topics/:topic_id?_method=PUT', function(req, res){
-  var topic_id = req.params.topic_id;
-  var id = req.params.id;
-  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
-    console.log(topic);
-    var upvote = topic[0].votes + 1;
-    // var downvote = topic[0].votes - 1;
-    db.run("UPDATE topics SET votes=" + upvote + " WHERE id=" + topic_id + ";");
-      res.send('topics/:topic_id');
-  });
-});
+// // user can upvote or downvote on a topic
+// app.put('/topics/:topic_id?_method=PUT', function(req, res){
+//   var topic_id = req.params.topic_id;
+//   var id = req.params.id;
+//   db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+//     console.log(topic);
+//     var upvote = topic[0].votes + 1;
+//     // var downvote = topic[0].votes - 1;
+//     db.run("UPDATE topics SET votes=" + upvote + " WHERE id=" + topic_id + ";");
+//       res.send('topics/:topic_id');
+//   });
+// });
 
 // the user can also read comments and topic information
 app.get('/topics/:topic_id', function(req, res){
@@ -86,9 +87,11 @@ app.get('/topics/:topic_id', function(req, res){
         votes: topic[0].votes,
         description: topic[0].description,
         commentDetails: comments,
+
       });
         // console.log(topic);
         // console.log(comments);
+        // console.log(comments.length);
       res.send(html);
     });
   });
@@ -105,34 +108,36 @@ var comment = req.body;
   });
 });
 // the user can edit a specific comment from the current topic
-app.put('topics/:topic_id/comments/:id', function(req, res){
+app.get('/topics/:topic_id/comments/:id', function(req, res){
   var topic_id = req.params.topic_id;
   var id = req.params.id;
-
+  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+    db.all("SELECT * FROM comments WHERE id=" + id + ";", {}, function(err, comment){
+       var html = Mustache.render(editCommentForm,{
+        topics_id: comment[0].topics_id,
+        id: comment[0].id,
+        title: comment[0].title,
+        content: comment[0].content
+       });
+       res.send(html);
+    });
+  });
 });
 
+app.put('/topics/:topic_id/comments/:id', function(req, res){
+  var topic_id = req.params.topic_id;
+  var id = req.params.id;
+  var comment = req.body;
+  console.log(req);
 
-// app.put('topics/:topic_id/comments/:id', function(req, res){
-//   var topic_id = req.params.topic_id;
-//   var id = req.params.id;
-//   var comment = req.body;
-//   db.all("SELECT FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
-//     db.all("SELECT FROM comments where id=" + id + ";", {}, function(err, comments){
-//        Mustache.render(editCommentForm,{
-//         topics_id: topic[0].topics_id,
-//         id: comments[0].id,
-//         title: comments[0].title,
-//         content: comments[0].content
-//        });
-//        db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE topics_id=" + topic_id + ";");
-//   res.redirect('topics/' + topics_id);
-//     });
-//   });
-// });
+  db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE id=" + id + ";");
+  res.redirect('/topics/' + topic_id);
+});
 // the user can also delete a specific comment from a topic
 
 
-
+// SELECT (SELECT COUNT(topics_id) from comments) AS COUNT, * 
+// from topics;
 
 // runs server
 app.listen(2000, function(){
