@@ -31,7 +31,6 @@ app.get('/', function(req, res){
 // user can see the list of topics
 app.get('/topics', function(req, res){
   db.all("SELECT * FROM topics ORDER BY votes;", function(err, topics){
-    db.all("SELECT * FROM comments ")
     var html = Mustache.render(topicsTemplate, {topicsList: topics});
     res.send(html);
   });
