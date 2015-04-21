@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Topic Edit</title>
+</head>
+<body>
+  <form action="/topics/{{topics_id}}?_method=PUT" method="POST">
+    <label>Title:
+      <input type="text" name="title" value="{{title}}" placeholder="render as h3">
+    </label>
+    <br>
+    <label>Description:
+      <input type="text" name="content" value="{{description}}" placeholder="render as text">
+    </label>
+    <br>
+    <button type="submit">Save</button>
+  </form>
+  <form action="/topics/{{topics_id}}" method="GET">
+    <button type="submit">Cancel</button>
+  </form>
+</body>
+</html>

@@ -47,33 +47,36 @@ app.post('/topics/new', function(req, res){
   res.redirect('/topics');
 });
 
-// user can upvote on a particular topic
-// app.put('/topics/:topic_id/upvote?_method=PUT', function(req, res){
+// // user can upvote on a particular topic
+// app.put('/topics/:topic_id', function(req, res){
 //   var topic_id = req.params.topic_id;
-
-//   db.run("UPDATE topics SET vote = vote + 1 WHERE id = " + topic_id + ";");
-//   res.redirect('/topics/' + topic_id);
-// });
-// // user can downvote on a particular topic
-// app.put('/topics/:topic_id/downvote?_method=PUT', function(req, res){
-//   var topic_id =req.params.topic_id;
-
-//   db.run("UPDATE topics SET vote = vote - 1 WHERE id = " + topic_id + ";");
+//   db.run("UPDATE topics SET votes= votes + 1 WHERE id=" + topic_id);
 //   res.redirect('/topics/' + topic_id);
 // });
 
-// // user can upvote or downvote on a topic
-// app.put('/topics/:topic_id?_method=PUT', function(req, res){
-//   var topic_id = req.params.topic_id;
-//   var id = req.params.id;
-//   db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
-//     console.log(topic);
-//     var upvote = topic[0].votes + 1;
-//     // var downvote = topic[0].votes - 1;
-//     db.run("UPDATE topics SET votes=" + upvote + " WHERE id=" + topic_id + ";");
-//       res.send('topics/:topic_id');
-//   });
-// });
+// the user can edit a specific comment from the current topic
+app.get('/topics/:topic_id', function(req, res){
+  var topic_id = req.params.topic_id;
+  db.all("SELECT * FROM topics WHERE id=" + topic_id + ";", {}, function(err, topic){
+       var html = Mustache.render(editCommentForm,{
+        topics_id: comment[0].topics_id,
+        id: comment[0].id,
+        title: comment[0].title,
+        content: comment[0].content
+       });
+       res.send(html);
+  });
+});
+// user can edit and update a comment of a topic
+app.put('/topics/:topic_id/comments/:id', function(req, res){
+  var topic_id = req.params.topic_id;
+  var id = req.params.id;
+  var topic = req.body;
+  console.log(req);
+
+  db.run("UPDATE topics SET title= '" + topic.title + "', description= '" + topic.description + "', votes= votes + 1 WHERE id=" + topic_id + ";");
+  res.redirect('/topics/' + topic_id);
+});
 
 // the user can also read comments and topic information
 app.get('/topics/:topic_id', function(req, res){
@@ -90,7 +93,6 @@ app.get('/topics/:topic_id', function(req, res){
       });
         // console.log(topic);
         // console.log(comments);
-        // console.log(comments.length);
       res.send(html);
     });
   });
@@ -122,7 +124,7 @@ app.get('/topics/:topic_id/comments/:id', function(req, res){
     });
   });
 });
-
+// user can edit and update a comment of a topic
 app.put('/topics/:topic_id/comments/:id', function(req, res){
   var topic_id = req.params.topic_id;
   var id = req.params.id;
@@ -132,11 +134,23 @@ app.put('/topics/:topic_id/comments/:id', function(req, res){
   db.run("UPDATE comments SET title= '" + comment.title + "', content= '" + comment.content + "' WHERE id=" + id + ";");
   res.redirect('/topics/' + topic_id);
 });
-// the user can also delete a specific comment from a topic
+// // the user can also delete a topic
+// app.delete('/topics/:topic_id/' ,{}, function(req, res){
+//   var topic_id = req.params.topic_id;
 
+//   db.run("DELETE from comments WHERE topics_id=" + topic_id);
+//   db.run("DELETE from topics WHERE id=" + topic_id);
+//   res.send('/topics');
+// });
+// // the user can also delete a specific comment from a topic
+// app.delete('/topics/:topic_id/comments/:id' ,{}, function(req, res){
+//   var topic_id = req.params.topic_id;
+//   var id = req.params.id;
 
-// SELECT (SELECT COUNT(topics_id) from comments) AS COUNT, * 
-// from topics;
+//   db.run("DELETE from comments WHERE topics_id=" + topic_id);
+//   res.redirect('/topics' + topic_id);
+// });
+
 
 // runs server
 app.listen(2000, function(){
